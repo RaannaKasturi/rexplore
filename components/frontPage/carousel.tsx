@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
 import React from "react";
+import { Skeleton } from "../ui/skeleton";
 
 interface PostData {
     title: string;
@@ -33,7 +34,7 @@ async function fetchImage(content: string) {
     return imgSrc;
 }
 
-export default function Test() {
+export default function FrontPageCarousel() {
     const [posts, setPosts] = React.useState<PostData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -79,16 +80,62 @@ export default function Test() {
     }, []);
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <Skeleton className="mx-4 md:mx-6 h-[350] rounded-md cursor-wait" />
+        )
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <Carousel
+                className="mx-4 md:mx-6"
+                opts={{
+                    align: "start",
+                    loop: true,
+                }}
+                plugins={[
+                    Autoplay({
+                        delay: 2000,
+                    }),
+                ]}
+            >
+                <CarouselContent>
+                    <CarouselItem>
+                        <Card
+                            style={{
+                                backgroundImage: `url("https://i.ibb.co/TBJqggw/Image-Not-Found.jpg")`,
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                            }}
+                        >
+                            <div className="bg-gradient-to-t from-black to-transparent rounded-lg">
+                                <CardHeader>
+                                    <CardTitle className="bg-secondary w-fit p-2 rounded">
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br className="hidden md:flex" />
+                                    <br className="hidden md:flex" />
+                                    <br className="hidden md:flex" />
+                                    <br className="hidden md:flex" />
+                                </CardContent>
+                                <CardFooter className="text-white">{error}</CardFooter>
+                            </div>
+                        </Card>
+                    </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-7 md:left-10 bg-primary text-white" />
+                <CarouselNext className="absolute right-7 md:right-10 bg-primary text-white" />
+            </Carousel>
+        )
     }
 
     return (
         <Carousel
-            className="px-4 md:px-6"
+            className="mx-4 md:mx-6"
             opts={{
                 align: "start",
                 loop: true,
@@ -111,7 +158,7 @@ export default function Test() {
                         >
                             <div className="bg-gradient-to-t from-black to-transparent rounded-lg">
                                 <CardHeader>
-                                    <CardTitle className="bg-secondary w-fit p-2 rounded">
+                                    <CardTitle className="bg-secondary w-fit p-2 rounded md:text-xl text-lg">
                                         {post.category}
                                     </CardTitle>
                                 </CardHeader>
@@ -124,7 +171,7 @@ export default function Test() {
                                     <br className="hidden md:flex" />
                                     <br className="hidden md:flex" />
                                 </CardContent>
-                                <CardFooter className="text-white">{post.title}</CardFooter>
+                                <CardFooter className="text-white md:text-xl text-lg">{post.title}</CardFooter>
                             </div>
                         </Card>
                     </CarouselItem>
