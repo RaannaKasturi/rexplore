@@ -46,8 +46,6 @@ export default function FrontPageCarousel() {
             .then((response) => response.json())
             .then(async (data) => {
                 if (data.status === "ok") {
-                    // Log the structure of the data
-                    // console.log(data);
                     const entries = JSON.parse(data.data).feed.entry;
                     if (Array.isArray(entries)) {
                         const fetchedPosts = await Promise.all(entries.map(async (entry: any) => ({
@@ -59,7 +57,6 @@ export default function FrontPageCarousel() {
                                     ?.href || "#",
                         })));
 
-                        // Filter out posts to show only the first post of each category
                         const uniqueCategoryPosts = Array.from(
                             new Map(fetchedPosts.map((post) => [post.category, post])).values()
                         );
@@ -81,8 +78,8 @@ export default function FrontPageCarousel() {
 
     if (loading) {
         return (
-            <Skeleton className="mx-4 md:mx-6 h-[350] rounded-md cursor-wait" />
-        )
+            <Skeleton className="mx-4 md:mx-6 h-[350px] rounded-md cursor-wait" />
+        );
     }
 
     if (error) {
@@ -106,12 +103,12 @@ export default function FrontPageCarousel() {
                                 backgroundImage: `url("https://i.ibb.co/TBJqggw/Image-Not-Found.jpg")`,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
+                                height: "350px", // Set the height here
                             }}
                         >
-                            <div className="bg-gradient-to-t from-black to-transparent rounded-lg">
+                            <div className="bg-gradient-to-t from-black to-transparent w-full h-full rounded-lg flex flex-col justify-end">
                                 <CardHeader>
-                                    <CardTitle className="bg-secondary w-fit p-2 rounded">
-                                    </CardTitle>
+                                    <CardTitle className="bg-secondary w-fit p-2 rounded"></CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <br />
@@ -130,7 +127,7 @@ export default function FrontPageCarousel() {
                 <CarouselPrevious className="absolute left-7 md:left-10 bg-primary text-white" />
                 <CarouselNext className="absolute right-7 md:right-10 bg-primary text-white" />
             </Carousel>
-        )
+        );
     }
 
     return (
@@ -154,24 +151,18 @@ export default function FrontPageCarousel() {
                                 backgroundImage: `url(${post.image})`,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
+                                height: "350px",
                             }}
                         >
-                            <div className="bg-gradient-to-t from-black to-transparent rounded-lg">
-                                <CardHeader>
+                            <div className="bg-gradient-to-t from-black to-transparent w-full h-full rounded-lg flex flex-col">
+                                <CardHeader className="pt-4">
                                     <CardTitle className="bg-secondary w-fit p-2 rounded md:text-xl text-lg">
                                         {post.category}
                                     </CardTitle>
                                 </CardHeader>
-                                <CardContent>
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br className="hidden md:flex" />
-                                    <br className="hidden md:flex" />
-                                    <br className="hidden md:flex" />
-                                    <br className="hidden md:flex" />
-                                </CardContent>
-                                <CardFooter className="text-white md:text-xl text-lg">{post.title}</CardFooter>
+                                <CardFooter className="text-white md:text-xl text-lg mt-auto">
+                                    {post.title}
+                                </CardFooter>
                             </div>
                         </Card>
                     </CarouselItem>
