@@ -41,7 +41,7 @@ export default function FrontPageCarousel() {
 
     React.useEffect(() => {
         fetch(
-            "https://raannakasturi-rexplore-cors-proxy.hf.space/fetch-feed?url=https://rexplore-blog.blogspot.com/feeds/posts/default/-/ZZZZZZZZZ?alt=json"
+            "https://raannakasturi-rexplore-cors-proxy.hf.space/fetch-feed?url=https://rexplore-backend.blogspot.com/feeds/posts/default/-/ZZZZZZZZZ?alt=json"
         )
             .then((response) => response.json())
             .then(async (data) => {
@@ -78,12 +78,64 @@ export default function FrontPageCarousel() {
 
     if (loading) {
         return (
-            <Skeleton className="mx-4 md:mx-6 h-[350px] rounded-md cursor-wait" />
+            <section id="latest-carousel">
+                <Skeleton className="mx-4 md:mx-6 h-[350px] rounded-md cursor-wait" />
+            </section>
         );
     }
 
     if (error) {
         return (
+            <section id="latest-carousel">
+                <Carousel
+                    className="mx-4 md:mx-6"
+                    opts={{
+                        align: "start",
+                        loop: true,
+                    }}
+                    plugins={[
+                        Autoplay({
+                            delay: 2000,
+                        }),
+                    ]}
+                >
+                    <CarouselContent>
+                        <CarouselItem>
+                            <Card
+                                style={{
+                                    backgroundImage: `url("https://i.ibb.co/TBJqggw/Image-Not-Found.jpg")`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                    height: "350px", // Set the height here
+                                }}
+                            >
+                                <div className="bg-gradient-to-t from-black to-transparent w-full h-full rounded-lg flex flex-col justify-end">
+                                    <CardHeader>
+                                        <CardTitle className="bg-secondary w-fit p-2 rounded"></CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br className="hidden md:flex" />
+                                        <br className="hidden md:flex" />
+                                        <br className="hidden md:flex" />
+                                        <br className="hidden md:flex" />
+                                    </CardContent>
+                                    <CardFooter className="text-white">{error}</CardFooter>
+                                </div>
+                            </Card>
+                        </CarouselItem>
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-7 md:left-10 bg-primary text-white" />
+                    <CarouselNext className="absolute right-7 md:right-10 bg-primary text-white" />
+                </Carousel>
+            </section>
+        );
+    }
+
+    return (
+        <section id="latest-carousel">
             <Carousel
                 className="mx-4 md:mx-6"
                 opts={{
@@ -97,79 +149,33 @@ export default function FrontPageCarousel() {
                 ]}
             >
                 <CarouselContent>
-                    <CarouselItem>
-                        <Card
-                            style={{
-                                backgroundImage: `url("https://i.ibb.co/TBJqggw/Image-Not-Found.jpg")`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                height: "350px", // Set the height here
-                            }}
-                        >
-                            <div className="bg-gradient-to-t from-black to-transparent w-full h-full rounded-lg flex flex-col justify-end">
-                                <CardHeader>
-                                    <CardTitle className="bg-secondary w-fit p-2 rounded"></CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br className="hidden md:flex" />
-                                    <br className="hidden md:flex" />
-                                    <br className="hidden md:flex" />
-                                    <br className="hidden md:flex" />
-                                </CardContent>
-                                <CardFooter className="text-white">{error}</CardFooter>
-                            </div>
-                        </Card>
-                    </CarouselItem>
+                    {posts.map((post, index) => (
+                        <CarouselItem key={index}>
+                            <Card
+                                style={{
+                                    backgroundImage: `url(${post.image})`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                    height: "350px",
+                                }}
+                            >
+                                <div className="bg-gradient-to-t from-black to-transparent w-full h-full rounded-lg flex flex-col">
+                                    <CardHeader className="pt-4">
+                                        <CardTitle className="bg-secondary w-fit p-2 rounded md:text-xl text-lg">
+                                            {post.category}
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardFooter className="text-white md:text-xl text-lg mt-auto">
+                                        {post.title}
+                                    </CardFooter>
+                                </div>
+                            </Card>
+                        </CarouselItem>
+                    ))}
                 </CarouselContent>
                 <CarouselPrevious className="absolute left-7 md:left-10 bg-primary text-white" />
                 <CarouselNext className="absolute right-7 md:right-10 bg-primary text-white" />
             </Carousel>
-        );
-    }
-
-    return (
-        <Carousel
-            className="mx-4 md:mx-6"
-            opts={{
-                align: "start",
-                loop: true,
-            }}
-            plugins={[
-                Autoplay({
-                    delay: 2000,
-                }),
-            ]}
-        >
-            <CarouselContent>
-                {posts.map((post, index) => (
-                    <CarouselItem key={index}>
-                        <Card
-                            style={{
-                                backgroundImage: `url(${post.image})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                height: "350px",
-                            }}
-                        >
-                            <div className="bg-gradient-to-t from-black to-transparent w-full h-full rounded-lg flex flex-col">
-                                <CardHeader className="pt-4">
-                                    <CardTitle className="bg-secondary w-fit p-2 rounded md:text-xl text-lg">
-                                        {post.category}
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardFooter className="text-white md:text-xl text-lg mt-auto">
-                                    {post.title}
-                                </CardFooter>
-                            </div>
-                        </Card>
-                    </CarouselItem>
-                ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute left-7 md:left-10 bg-primary text-white" />
-            <CarouselNext className="absolute right-7 md:right-10 bg-primary text-white" />
-        </Carousel>
+        </section>
     );
 }
